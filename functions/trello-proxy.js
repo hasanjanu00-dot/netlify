@@ -1,5 +1,4 @@
 // functions/trello-proxy.js
-import fetch from "node-fetch"; // <-- Use import instead of require
 
 export async function handler(event) {
   const { TRELLO_KEY, TRELLO_TOKEN } = process.env;
@@ -7,7 +6,7 @@ export async function handler(event) {
   const url = `https://api.trello.com/1/members/me/boards?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url); // Node 18+ has global fetch
     const data = await response.json();
 
     return {
