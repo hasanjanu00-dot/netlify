@@ -1,6 +1,7 @@
 {
   "name": "netlify-trello-proxy",
   "version": "1.0.0",
+  "type": "module",
   "description": "Serverless proxy for Trello API on Netlify",
   "main": "functions/trello-proxy.js",
   "dependencies": {
