@@ -1,21 +1,24 @@
-const fetch = require('node-fetch');
+// functions/trello-proxy.js
+import fetch from "node-fetch"; // <-- Use import instead of require
 
-exports.handler = async (event) => {
-  const path = event.queryStringParameters?.path || '/1/members/me/boards';
-  const token = event.headers['x-trello-token']; // user token from client
-  const key = process.env.TRELLO_KEY; // your API key from Trello
+export async function handler(event) {
+  const { TRELLO_KEY, TRELLO_TOKEN } = process.env;
 
-  const url = `https://api.trello.com${path}?key=${key}${token ? `&token=${token}` : ''}`;
-  
-  const resp = await fetch(url);
-  const data = await resp.text();
+  const url = `https://api.trello.com/1/members/me/boards?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
 
-  return {
-    statusCode: resp.status,
-    headers: { 
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json'
-    },
-    body: data
-  };
-};
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
+  }
+}
