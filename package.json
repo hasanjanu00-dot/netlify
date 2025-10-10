@@ -4,5 +4,7 @@
   "description": "Serverless proxy for Trello API on Netlify",
   "main": "functions/trello-proxy.js",
   "type": "module",
-  "dependencies": {}
+  "dependencies": {
+    "node-fetch": "^3.4.1"
+  }
 }
