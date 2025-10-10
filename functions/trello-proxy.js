@@ -24,6 +24,12 @@ exports.handler = async function(event, context) {
         url = `https://api.trello.com/1/boards/${boardId}/lists?cards=all&card_fields=name,desc&key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
         break;
 
+      case "createList":
+        url = `https://api.trello.com/1/lists?name=${encodeURIComponent(name)}&idBoard=${boardId}&key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
+        options.method = "POST";
+        break;
+
+
       case "createCard":
         url = `https://api.trello.com/1/cards?name=${encodeURIComponent(name)}&idList=${listId}&key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
         options.method = "POST";
