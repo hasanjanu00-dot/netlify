@@ -1,9 +1,10 @@
-import fetch from "node-fetch";
+// Change from ESM import to CommonJS require
+const fetch = require("node-fetch");
 
 const TRELLO_KEY = process.env.TRELLO_KEY;
 const TRELLO_TOKEN = process.env.TRELLO_TOKEN;
 
-export async function handler(event, context) {
+exports.handler = async function(event, context) {
   const { action, boardId, listId, cardId, name, desc } = event.queryStringParameters || {};
   let url = "";
   let options = { method: "GET" };
@@ -13,26 +14,21 @@ export async function handler(event, context) {
       case "getBoards":
         url = `https://api.trello.com/1/members/me/boards?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
         break;
-
       case "getLists":
         url = `https://api.trello.com/1/boards/${boardId}/lists?cards=all&card_fields=name,desc&key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
         break;
-
       case "createCard":
         url = `https://api.trello.com/1/cards?name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc || "")}&idList=${listId}&key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
         options.method = "POST";
         break;
-
       case "updateCard":
         url = `https://api.trello.com/1/cards/${cardId}?name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc || "")}&key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
         options.method = "PUT";
         break;
-
       case "deleteCard":
         url = `https://api.trello.com/1/cards/${cardId}?key=${TRELLO_KEY}&token=${TRELLO_TOKEN}`;
         options.method = "DELETE";
         break;
-
       default:
         return { statusCode: 400, body: "Invalid action" };
     }
@@ -43,4 +39,4 @@ export async function handler(event, context) {
   } catch (err) {
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
-}
+};
